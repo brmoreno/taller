@@ -7,7 +7,7 @@ function setup() {
 		c = color(random(255),random(255),random(255));
 		particulas.push(new Particula(random(width),random(height),random(-1,1),random(-1,1),random(10,50),c));
 	}
-	for (i = 0; i<10; i++){
+	for (i = 0; i<50; i++){
 		nodos.push(new Nodo(this.random(width), this.random(height),random(50,200)));
 	}
 }
@@ -17,6 +17,7 @@ function draw() {
 	for (i = 0 ; i<particulas.length; i++){
 		particulas[i].mover();
 		particulas[i].display();
+		particulas[i].cEscala();
 	}
 }
 
@@ -32,14 +33,17 @@ function Particula(x_, y_, dx_, dy_,t_,c_){
 	this.display = function (){
 		noStroke();
 		fill(this.c);
-		ellipse(this.x,this.y,this.t,this.t);
+		ellipse(this.x,this.y,this.t*this.escala,this.t*this.escala);
 	}
 	
-	this.cEscala = function (anodo_[]){
-		for(i = 0; i<anodo_.length; i++){
-			n = anodo_[i];
+	this.cEscala = function (){
+		this.escala = 0;
+		for(j = 0; j<nodos.length; j++){
+			n = nodos[j];
 			distancia = dist(this.x,this.y,n.x,n.y);
-			this.escala = map(distancia,0,this.r,0.1,1);
+			if (distancia<n.r){
+				this.escala += map(distancia,0,n.r,1,0);
+			}
 		}
 	}
 	
